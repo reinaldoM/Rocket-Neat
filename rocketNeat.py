@@ -8,7 +8,7 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((600, 600))
 font = pygame.font.Font('freesansbold.ttf', 16)
 
-blue = (0, 0, 128)
+black = (0, 0, 0)
 white = (255, 255, 255)
 
 
@@ -50,6 +50,7 @@ class GameManager(object):
     def __init__(self):
         #self.player = Player(15,300,"rocket.png")
         self.popSize = 0
+        self.generation = 0
         self.population = []
         self.bestdistance = 0
         self.walls = []
@@ -99,6 +100,7 @@ class GameManager(object):
         self.bestdistance = 0
         
         self.walls = []
+        self.generation += 1
         self.stopLoop = False
         self.dif = 0
         self.running = True
@@ -106,15 +108,18 @@ class GameManager(object):
         self.createPairWall()
         #self.play()
     def text_show(self, value, offset):
-        t = font.render(str(value), True, blue)
+        t = font.render(value, True, black)
         textRect = t.get_rect()
-        textRect.center = (600 // 2, offset)
+        textRect.center = (80, offset)
         screen.blit(t, textRect)
     def step(self, actions):
 
         #self.text_show(self.walls[1].y,40)
-        #self.text_show(self.player.y,20)
-        self.text_show(self.bestdistance,60)
+        alive = []
+        alive = [alive.append(x) for x in self.population if x.stop == False]
+        self.text_show("Generation: {}".format(self.generation),20)
+        self.text_show("Population: {}/{}".format(len(alive),len(self.population)),40)
+        self.text_show("Distance: {}".format(self.bestdistance),60)
 
         n_of_dead = 0
         for index, i in enumerate(self.population):
